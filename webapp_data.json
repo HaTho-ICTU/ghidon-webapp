@@ -1,0 +1,421 @@
+{
+  "exported_at": "2026-03-01 14:06:01",
+  "regions": [
+    {
+      "id": 2,
+      "name": "Mạo Khê"
+    },
+    {
+      "id": 154,
+      "name": "Quảng Yên"
+    },
+    {
+      "id": 3,
+      "name": "Uông Bí"
+    },
+    {
+      "id": 4,
+      "name": "Vàng Danh"
+    },
+    {
+      "id": 65,
+      "name": "Vàng ranh"
+    },
+    {
+      "id": 1,
+      "name": "Đông Triều"
+    }
+  ],
+  "customers": [
+    {
+      "id": 17,
+      "name": "Bà Cải",
+      "address": "Chợ Cốc cũ,Phong hải",
+      "phone": "",
+      "region_id": 154,
+      "notes": ""
+    },
+    {
+      "id": 24,
+      "name": "Bà Hằng",
+      "address": "Chợ Trung Tâm",
+      "phone": "",
+      "region_id": 3,
+      "notes": ""
+    },
+    {
+      "id": 8,
+      "name": "bà Quyết",
+      "address": "chợ Phiên",
+      "phone": "",
+      "region_id": 2,
+      "notes": ""
+    },
+    {
+      "id": 30,
+      "name": "Chị Hạnh Tuyền",
+      "address": "Tràng Bạch",
+      "phone": "",
+      "region_id": 2,
+      "notes": ""
+    },
+    {
+      "id": 21,
+      "name": "Chị Liên(Tân Yên)",
+      "address": "Tân Yên",
+      "phone": "",
+      "region_id": 2,
+      "notes": ""
+    },
+    {
+      "id": 20,
+      "name": "Chị Liên(Xóm hàn)",
+      "address": "Xóm Hàn, Liên Vị",
+      "phone": "",
+      "region_id": 154,
+      "notes": ""
+    },
+    {
+      "id": 29,
+      "name": "Chị Thảo-Chợ P.Đông",
+      "address": "Chợ Phương Đông",
+      "phone": "",
+      "region_id": 3,
+      "notes": ""
+    },
+    {
+      "id": 18,
+      "name": "Chị Út",
+      "address": "Chợ Đình",
+      "phone": "",
+      "region_id": 154,
+      "notes": ""
+    },
+    {
+      "id": 25,
+      "name": "Chị Điệp",
+      "address": "Chợ Phương Đông",
+      "phone": "",
+      "region_id": 3,
+      "notes": ""
+    },
+    {
+      "id": 27,
+      "name": "Cô Hanh",
+      "address": "Chợ Trung tâm",
+      "phone": "",
+      "region_id": 3,
+      "notes": ""
+    },
+    {
+      "id": 28,
+      "name": "Cô Minh-Chợ P.Đông",
+      "address": "Chợ Phương Đông",
+      "phone": "",
+      "region_id": 3,
+      "notes": ""
+    },
+    {
+      "id": 31,
+      "name": "cải",
+      "address": "Chợ Cốc",
+      "phone": "",
+      "region_id": 154,
+      "notes": ""
+    },
+    {
+      "id": 14,
+      "name": "Em Hương",
+      "address": "Đường Nguyễn Trãi, Thanh Sơn,Uông Bí",
+      "phone": "",
+      "region_id": 3,
+      "notes": ""
+    },
+    {
+      "id": 15,
+      "name": "Em Hải",
+      "address": "Sông Khoai 1",
+      "phone": "",
+      "region_id": 154,
+      "notes": ""
+    },
+    {
+      "id": 11,
+      "name": "mạnh",
+      "address": "",
+      "phone": "",
+      "region_id": 1,
+      "notes": ""
+    },
+    {
+      "id": 19,
+      "name": "Phúc Tường",
+      "address": "Sông Khoai 1",
+      "phone": "",
+      "region_id": 154,
+      "notes": ""
+    },
+    {
+      "id": 16,
+      "name": "Phương Anh",
+      "address": "Cầu Cốc",
+      "phone": "",
+      "region_id": 154,
+      "notes": ""
+    },
+    {
+      "id": 23,
+      "name": "Siêu thị Phương Đông",
+      "address": "",
+      "phone": "",
+      "region_id": 3,
+      "notes": ""
+    },
+    {
+      "id": 7,
+      "name": "Thọ",
+      "address": "chợ đồn",
+      "phone": "123456",
+      "region_id": 1,
+      "notes": ""
+    },
+    {
+      "id": 10,
+      "name": "tiến",
+      "address": "",
+      "phone": "",
+      "region_id": 3,
+      "notes": ""
+    },
+    {
+      "id": 26,
+      "name": "Tiến Yến",
+      "address": "",
+      "phone": "",
+      "region_id": 2,
+      "notes": ""
+    },
+    {
+      "id": 12,
+      "name": "tâm",
+      "address": "",
+      "phone": "",
+      "region_id": 4,
+      "notes": ""
+    }
+  ],
+  "products": [
+    {
+      "id": 15,
+      "name": "Bò sốt vang",
+      "price": 165000.0,
+      "unit": "hộp"
+    },
+    {
+      "id": 19,
+      "name": "Bột Phô mai",
+      "price": 160000.0,
+      "unit": "bịch"
+    },
+    {
+      "id": 18,
+      "name": "Bột ớt trắng",
+      "price": 160000.0,
+      "unit": "bịch"
+    },
+    {
+      "id": 27,
+      "name": "Chấm lọ bé",
+      "price": 120000.0,
+      "unit": "vỉ"
+    },
+    {
+      "id": 26,
+      "name": "Chấm lọ to",
+      "price": 105000.0,
+      "unit": "vỉ"
+    },
+    {
+      "id": 28,
+      "name": "Dấm rẻ",
+      "price": 55000.0,
+      "unit": "thùng"
+    },
+    {
+      "id": 16,
+      "name": "Dấm táo",
+      "price": 192000.0,
+      "unit": "thùng"
+    },
+    {
+      "id": 9,
+      "name": "Dầu điều bé(100ml)",
+      "price": 100000.0,
+      "unit": "bộ"
+    },
+    {
+      "id": 10,
+      "name": "Dầu điều bé(100ml)",
+      "price": 10000.0,
+      "unit": "chai"
+    },
+    {
+      "id": 8,
+      "name": "Gà chiên mắm",
+      "price": 165000.0,
+      "unit": "hộp"
+    },
+    {
+      "id": 21,
+      "name": "Gà chiên mắm",
+      "price": 8250.0,
+      "unit": "gói"
+    },
+    {
+      "id": 20,
+      "name": "Gà nướng",
+      "price": 8250.0,
+      "unit": "gói"
+    },
+    {
+      "id": 17,
+      "name": "Kẹo thập cẩm",
+      "price": 17500.0,
+      "unit": "gói"
+    },
+    {
+      "id": 23,
+      "name": "Lẩu gà",
+      "price": 170000.0,
+      "unit": "hộp"
+    },
+    {
+      "id": 4,
+      "name": "Lẩu hải sản",
+      "price": 165000.0,
+      "unit": "hộp"
+    },
+    {
+      "id": 1,
+      "name": "mắm Hạnh Phúc",
+      "price": 133333.0,
+      "unit": "chai"
+    },
+    {
+      "id": 2,
+      "name": "Mắm hạnh phúc(to)",
+      "price": 1596000.0,
+      "unit": "thùng"
+    },
+    {
+      "id": 24,
+      "name": "Mắm tôm 300g",
+      "price": 8000.0,
+      "unit": "chai"
+    },
+    {
+      "id": 25,
+      "name": "Mắm tôm 500g",
+      "price": 15000.0,
+      "unit": "chai"
+    },
+    {
+      "id": 30,
+      "name": "Mẻ",
+      "price": 180000.0,
+      "unit": "thùng"
+    },
+    {
+      "id": 14,
+      "name": "Mộc nhĩ thái",
+      "price": 195000.0,
+      "unit": "bịch"
+    },
+    {
+      "id": 6,
+      "name": "Sườn xào chua ngọt",
+      "price": 165000.0,
+      "unit": "hộp"
+    },
+    {
+      "id": 29,
+      "name": "Thính gạo",
+      "price": 50000.0,
+      "unit": "bịch"
+    },
+    {
+      "id": 5,
+      "name": "Thịt nướng xả",
+      "price": 165000.0,
+      "unit": "hộp"
+    },
+    {
+      "id": 12,
+      "name": "Tiêu bắc",
+      "price": 115000.0,
+      "unit": "vỉ"
+    },
+    {
+      "id": 7,
+      "name": "tương bần",
+      "price": 105000.0,
+      "unit": "thùng"
+    },
+    {
+      "id": 11,
+      "name": "Tần gà TB",
+      "price": 75000.0,
+      "unit": "bịch"
+    },
+    {
+      "id": 22,
+      "name": "Xốt ướp thịt nướng 70g",
+      "price": 170.0,
+      "unit": "hộp"
+    }
+  ],
+  "product_prices": [
+    {
+      "id": 11,
+      "product_id": 15,
+      "price": 170000.0,
+      "note": ""
+    },
+    {
+      "id": 9,
+      "product_id": 4,
+      "price": 160000.0,
+      "note": ""
+    },
+    {
+      "id": 10,
+      "product_id": 4,
+      "price": 170000.0,
+      "note": ""
+    },
+    {
+      "id": 14,
+      "product_id": 2,
+      "price": 1600000.0,
+      "note": ""
+    },
+    {
+      "id": 12,
+      "product_id": 6,
+      "price": 170000.0,
+      "note": ""
+    },
+    {
+      "id": 13,
+      "product_id": 5,
+      "price": 170000.0,
+      "note": ""
+    },
+    {
+      "id": 8,
+      "product_id": 7,
+      "price": 100000.0,
+      "note": ""
+    }
+  ]
+}
