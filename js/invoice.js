@@ -28,7 +28,7 @@ const Invoice = (() => {
     container.innerHTML = `
       <!-- Customer selection -->
       <div class="card">
-        <div class="card-title">Khach hang</div>
+        <div class="card-title">Khách hàng</div>
         <div id="customer-section">
           ${renderCustomerSection()}
         </div>
@@ -36,44 +36,44 @@ const Invoice = (() => {
 
       <!-- Add product -->
       <div class="card">
-        <div class="card-title">Them san pham</div>
+        <div class="card-title">Thêm sản phẩm</div>
         <div class="form-group search-wrapper">
-          <input type="text" class="form-input" id="product-search" placeholder="Tim san pham..." autocomplete="off">
+          <input type="text" class="form-input" id="product-search" placeholder="Tìm sản phẩm..." autocomplete="off">
           <div class="search-results" id="product-results"></div>
         </div>
         <div id="product-form" class="hidden">
           <div id="selected-product-name" style="font-weight:600;margin-bottom:8px;"></div>
           <div class="form-group">
-            <label class="form-label">Chon gia</label>
+            <label class="form-label">Chọn giá</label>
             <div class="price-options" id="price-options"></div>
           </div>
           <div class="form-group">
-            <label class="form-label">Gia tuy chinh</label>
-            <input type="number" class="form-input" id="custom-price" placeholder="Nhap gia..." inputmode="numeric">
+            <label class="form-label">Giá tùy chỉnh</label>
+            <input type="number" class="form-input" id="custom-price" placeholder="Nhập giá..." inputmode="numeric">
           </div>
           <div class="form-group">
-            <label class="form-label">So luong</label>
+            <label class="form-label">Số lượng</label>
             <div class="qty-control">
               <button class="qty-btn" id="qty-minus">-</button>
               <input type="number" class="qty-input" id="qty-input" value="1" min="1" inputmode="numeric">
               <button class="qty-btn" id="qty-plus">+</button>
             </div>
           </div>
-          <button class="btn btn-primary btn-block" id="add-item-btn">Them vao don</button>
+          <button class="btn btn-primary btn-block" id="add-item-btn">Thêm vào đơn</button>
         </div>
         <div class="divider"></div>
         <div class="d-flex gap-8">
-          <button class="btn btn-outline btn-sm" id="add-other-btn" style="flex:1;border-color:var(--amber);color:var(--amber);">Khac</button>
-          <button class="btn btn-outline btn-sm" id="add-promo-btn" style="flex:1;border-color:var(--purple);color:var(--purple);">Khuyen mai</button>
+          <button class="btn btn-outline btn-sm" id="add-other-btn" style="flex:1;border-color:var(--amber);color:var(--amber);">Khác</button>
+          <button class="btn btn-outline btn-sm" id="add-promo-btn" style="flex:1;border-color:var(--purple);color:var(--purple);">Khuyến mãi</button>
         </div>
       </div>
 
       <!-- Item list -->
       <div class="card">
-        <div class="card-title">Danh sach (<span id="item-count">0</span>)</div>
+        <div class="card-title">Danh sách (<span id="item-count">0</span>)</div>
         <div id="item-list"></div>
         <div class="total-bar">
-          <span class="total-label">Tong cong</span>
+          <span class="total-label">Tổng cộng</span>
           <span class="total-amount" id="total-amount">0</span>
         </div>
       </div>
@@ -81,14 +81,14 @@ const Invoice = (() => {
       <!-- Note -->
       <div class="card">
         <div class="form-group" style="margin-bottom:0">
-          <label class="form-label">Ghi chu</label>
-          <textarea class="note-input" id="invoice-note" rows="2" placeholder="Ghi chu cho don hang...">${invoice ? (invoice.note || '') : ''}</textarea>
+          <label class="form-label">Ghi chú</label>
+          <textarea class="note-input" id="invoice-note" rows="2" placeholder="Ghi chú cho đơn hàng...">${invoice ? (invoice.note || '') : ''}</textarea>
         </div>
       </div>
 
       <!-- Save button -->
       <button class="btn btn-success btn-block mt-12" id="save-invoice-btn" style="margin-bottom:20px;">
-        ${editingInvoice ? 'Cap nhat don' : 'Luu don hang'}
+        ${editingInvoice ? 'Cập nhật đơn' : 'Lưu đơn hàng'}
       </button>
     `;
 
@@ -115,29 +115,29 @@ const Invoice = (() => {
           <div style="font-weight:600;">${selectedCustomer.name}</div>
           ${selectedCustomer.address ? `<div class="text-secondary" style="font-size:0.8rem;">${selectedCustomer.address}</div>` : ''}
         </div>
-        <button class="btn btn-outline btn-xs" id="change-customer-btn">Doi</button>
+        <button class="btn btn-outline btn-xs" id="change-customer-btn">Đổi</button>
       </div>`;
     }
     return `
       <div class="search-wrapper">
-        <input type="text" class="form-input" id="customer-search" placeholder="Tim khach hang..." autocomplete="off">
+        <input type="text" class="form-input" id="customer-search" placeholder="Tìm khách hàng..." autocomplete="off">
         <div class="search-results" id="customer-results"></div>
       </div>
-      <button class="btn btn-outline btn-sm btn-block mt-8" id="guest-btn">Khach la</button>
+      <button class="btn btn-outline btn-sm btn-block mt-8" id="guest-btn">Khách lạ</button>
     `;
   }
 
   function renderGuestForm(name, address) {
     return `
       <div class="form-group">
-        <label class="form-label">Ten khach la</label>
-        <input type="text" class="form-input" id="guest-name" placeholder="Ten khach..." value="${name}">
+        <label class="form-label">Tên khách lạ</label>
+        <input type="text" class="form-input" id="guest-name" placeholder="Tên khách..." value="${name}">
       </div>
       <div class="form-group" style="margin-bottom:0">
-        <label class="form-label">Dia chi</label>
-        <input type="text" class="form-input" id="guest-address" placeholder="Dia chi..." value="${address}">
+        <label class="form-label">Địa chỉ</label>
+        <input type="text" class="form-input" id="guest-address" placeholder="Địa chỉ..." value="${address}">
       </div>
-      <button class="btn btn-outline btn-xs mt-8" id="cancel-guest-btn">Chon khach co san</button>
+      <button class="btn btn-outline btn-xs mt-8" id="cancel-guest-btn">Chọn khách có sẵn</button>
     `;
   }
 
@@ -223,9 +223,9 @@ const Invoice = (() => {
 
     // Price options
     const priceDiv = document.getElementById('price-options');
-    const prices = [{ price: product.price, note: 'Gia goc' }];
+    const prices = [{ price: product.price, note: 'Giá gốc' }];
     if (product.extra_prices) {
-      product.extra_prices.forEach((ep) => prices.push({ price: ep.price, note: ep.note || 'Gia khac' }));
+      product.extra_prices.forEach((ep) => prices.push({ price: ep.price, note: ep.note || 'Giá khác' }));
     }
 
     priceDiv.innerHTML = prices.map((p, i) =>
@@ -263,7 +263,7 @@ const Invoice = (() => {
   function setupAddItem() {
     document.getElementById('add-item-btn').onclick = () => {
       if (!selectedProduct) {
-        UI.toast('Chon san pham truoc');
+        UI.toast('Chọn sản phẩm trước');
         return;
       }
 
@@ -272,7 +272,7 @@ const Invoice = (() => {
       const qty = parseInt(document.getElementById('qty-input').value) || 1;
 
       if (!price || price <= 0) {
-        UI.toast('Gia khong hop le');
+        UI.toast('Giá không hợp lệ');
         return;
       }
 
@@ -293,7 +293,7 @@ const Invoice = (() => {
       selectedPrice = null;
       document.getElementById('product-search').value = '';
       document.getElementById('product-form').classList.add('hidden');
-      UI.toast('Da them');
+      UI.toast('Đã thêm');
     };
   }
 
@@ -301,27 +301,27 @@ const Invoice = (() => {
   function setupOtherItem() {
     document.getElementById('add-other-btn').onclick = () => {
       UI.showModal(`
-        <div class="modal-title">Them muc khac</div>
+        <div class="modal-title">Thêm mục khác</div>
         <div class="form-group">
-          <label class="form-label">Ghi chu (doi tra, no, v.v.)</label>
-          <input type="text" class="form-input" id="other-note" placeholder="Noi dung..." autofocus>
+          <label class="form-label">Ghi chú (đổi trả, nợ, v.v.)</label>
+          <input type="text" class="form-input" id="other-note" placeholder="Nội dung..." autofocus>
         </div>
         <div class="form-group">
-          <label class="form-label">So luong</label>
+          <label class="form-label">Số lượng</label>
           <input type="number" class="form-input" id="other-qty" value="1" min="1" inputmode="numeric">
         </div>
         <div class="form-group">
-          <label class="form-label">Gia (+/- hoac so, VD: 50000, -30000)</label>
+          <label class="form-label">Giá (+/- hoặc số, VD: 50000, -30000)</label>
           <input type="text" class="form-input" id="other-price" value="0" inputmode="numeric">
         </div>
-        <button class="btn btn-success btn-block mt-8" id="other-confirm">Them vao don</button>
+        <button class="btn btn-success btn-block mt-8" id="other-confirm">Thêm vào đơn</button>
       `);
       document.getElementById('other-note').focus();
       document.getElementById('other-confirm').onclick = () => {
         const note = document.getElementById('other-note').value.trim();
-        if (!note) { UI.toast('Nhap ghi chu'); return; }
+        if (!note) { UI.toast('Nhập ghi chú'); return; }
         const qty = parseInt(document.getElementById('other-qty').value) || 1;
-        if (qty <= 0) { UI.toast('So luong khong hop le'); return; }
+        if (qty <= 0) { UI.toast('Số lượng không hợp lệ'); return; }
         let priceStr = document.getElementById('other-price').value.trim().replace(/,/g, '');
         let price = 0;
         if (priceStr.startsWith('+')) price = parseFloat(priceStr.slice(1)) || 0;
@@ -330,7 +330,7 @@ const Invoice = (() => {
 
         items.push({
           product_id: null,
-          product_name: `[Khac] ${note}`,
+          product_name: `[Khác] ${note}`,
           unit: '',
           quantity: qty,
           price: price,
@@ -340,7 +340,7 @@ const Invoice = (() => {
         });
         renderItems();
         UI.closeModal();
-        UI.toast('Da them');
+        UI.toast('Đã thêm');
       };
     };
   }
@@ -349,30 +349,30 @@ const Invoice = (() => {
   function setupPromotion() {
     document.getElementById('add-promo-btn').onclick = () => {
       UI.showModal(`
-        <div class="modal-title">Khuyen mai</div>
+        <div class="modal-title">Khuyến mãi</div>
         <div class="form-group">
-          <label class="form-label">So goi khuyen mai</label>
+          <label class="form-label">Số gói khuyến mãi</label>
           <input type="number" class="form-input" id="promo-qty" value="1" min="1" inputmode="numeric" autofocus>
         </div>
-        <button class="btn btn-success btn-block mt-8" id="promo-confirm">Xac nhan</button>
+        <button class="btn btn-success btn-block mt-8" id="promo-confirm">Xác nhận</button>
       `);
       document.getElementById('promo-qty').focus();
       document.getElementById('promo-confirm').onclick = () => {
         const qty = parseInt(document.getElementById('promo-qty').value) || 0;
-        if (qty <= 0) { UI.toast('Nhap so luong hop le'); return; }
+        if (qty <= 0) { UI.toast('Nhập số lượng hợp lệ'); return; }
         items.push({
           product_id: null,
-          product_name: `Khuyen mai ${qty} goi`,
+          product_name: `Khuyến mãi ${qty} gói`,
           unit: '',
           quantity: qty,
           price: 0,
           subtotal: 0,
           item_type: 'other',
-          note: `Khuyen mai ${qty} goi`
+          note: `Khuyến mãi ${qty} gói`
         });
         renderItems();
         UI.closeModal();
-        UI.toast('Da them khuyen mai');
+        UI.toast('Đã thêm khuyến mãi');
       };
     };
   }
@@ -385,7 +385,7 @@ const Invoice = (() => {
     countEl.textContent = items.length;
 
     if (items.length === 0) {
-      listEl.innerHTML = '<div class="empty-state"><p>Chua co san pham nao</p></div>';
+      listEl.innerHTML = '<div class="empty-state"><p>Chưa có sản phẩm nào</p></div>';
       totalEl.textContent = '0';
       return;
     }
@@ -436,18 +436,18 @@ const Invoice = (() => {
     document.getElementById('save-invoice-btn').onclick = async () => {
       // Validate
       if (!selectedCustomer && !isGuest) {
-        UI.toast('Chon khach hang truoc');
+        UI.toast('Chọn khách hàng trước');
         return;
       }
       if (isGuest) {
         const gn = document.getElementById('guest-name');
         if (!gn || !gn.value.trim()) {
-          UI.toast('Nhap ten khach la');
+          UI.toast('Nhập tên khách lạ');
           return;
         }
       }
       if (items.length === 0) {
-        UI.toast('Them it nhat 1 san pham');
+        UI.toast('Thêm ít nhất 1 sản phẩm');
         return;
       }
 
@@ -478,7 +478,7 @@ const Invoice = (() => {
       };
 
       await DB.invoices.save(invoice);
-      UI.toast(editingInvoice ? 'Da cap nhat don' : 'Da luu don hang');
+      UI.toast(editingInvoice ? 'Đã cập nhật đơn' : 'Đã lưu đơn hàng');
       reset();
       // Navigate to orders page to see the saved invoice
       if (typeof App !== 'undefined') App.navigate('orders');
@@ -488,7 +488,7 @@ const Invoice = (() => {
   // === Edit existing invoice ===
   async function edit(tempId) {
     const inv = await DB.invoices.get(tempId);
-    if (!inv) { UI.toast('Khong tim thay don'); return; }
+    if (!inv) { UI.toast('Không tìm thấy đơn'); return; }
     // Load customer name if needed
     if (inv.customer_id && !inv.customer_name) {
       const c = await DB.customers.get(inv.customer_id);

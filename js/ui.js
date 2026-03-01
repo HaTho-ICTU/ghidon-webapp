@@ -65,7 +65,7 @@ const UI = (() => {
       const keyword = input.value.trim();
       items = await searchFn(keyword);
       if (items.length === 0) {
-        resultsContainer.innerHTML = '<div class="search-item text-secondary">Khong tim thay</div>';
+        resultsContainer.innerHTML = '<div class="search-item text-secondary">Không tìm thấy</div>';
         resultsContainer.classList.add('show');
         return;
       }
@@ -112,8 +112,8 @@ const UI = (() => {
     showModal(`
       <div class="modal-title">${message}</div>
       <div class="action-row">
-        <button class="btn btn-outline" id="modal-cancel">Huy</button>
-        <button class="btn btn-danger" id="modal-confirm">Xoa</button>
+        <button class="btn btn-outline" id="modal-cancel">Huỷ</button>
+        <button class="btn btn-danger" id="modal-confirm">Xoá</button>
       </div>
     `);
     document.getElementById('modal-cancel').onclick = closeModal;

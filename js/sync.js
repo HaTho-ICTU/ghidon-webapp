@@ -12,61 +12,61 @@ const Sync = (() => {
     container.innerHTML = `
       <!-- Current data stats -->
       <div class="card">
-        <div class="card-title">Du lieu hien tai</div>
+        <div class="card-title">Dữ liệu hiện tại</div>
         <div class="sync-stat">
           <div class="stat-box">
             <div class="stat-number">${customerCount}</div>
-            <div class="stat-label">Khach hang</div>
+            <div class="stat-label">Khách hàng</div>
           </div>
           <div class="stat-box">
             <div class="stat-number">${productCount}</div>
-            <div class="stat-label">San pham</div>
+            <div class="stat-label">Sản phẩm</div>
           </div>
           <div class="stat-box">
             <div class="stat-number">${orderCount}</div>
-            <div class="stat-label">Don hang</div>
+            <div class="stat-label">Đơn hàng</div>
           </div>
         </div>
       </div>
 
       <!-- Import section -->
       <div class="card">
-        <div class="card-title">Nhap du lieu tu may tinh</div>
+        <div class="card-title">Nhập dữ liệu từ máy tính</div>
         <p class="text-secondary mb-12" style="font-size:0.85rem;">
-          Chon file JSON da xuat tu phan mem desktop (khach hang, san pham, gia).
+          Chọn file JSON đã xuất từ phần mềm desktop (khách hàng, sản phẩm, giá).
         </p>
         <input type="file" id="import-file" accept=".json" class="hidden">
         <button class="btn btn-primary btn-block" id="import-btn">
-          Chon file de nhap
+          Chọn file để nhập
         </button>
         <div id="import-status" class="mt-8" style="font-size:0.85rem;"></div>
       </div>
 
       <!-- Export section -->
       <div class="card">
-        <div class="card-title">Xuat don hang ve may tinh</div>
+        <div class="card-title">Xuất đơn hàng về máy tính</div>
         <p class="text-secondary mb-12" style="font-size:0.85rem;">
-          Xuat tat ca don hang thanh file JSON de nhap vao phan mem desktop.
+          Xuất tất cả đơn hàng thành file JSON để nhập vào phần mềm desktop.
         </p>
         <div class="form-group">
-          <label class="form-label">Tu ngay</label>
+          <label class="form-label">Từ ngày</label>
           <input type="date" class="form-input" id="export-start" value="${todayStr()}">
         </div>
         <div class="form-group">
-          <label class="form-label">Den ngay</label>
+          <label class="form-label">Đến ngày</label>
           <input type="date" class="form-input" id="export-end" value="${todayStr()}">
         </div>
         <button class="btn btn-success btn-block" id="export-btn">
-          Xuat don hang
+          Xuất đơn hàng
         </button>
         <div id="export-status" class="mt-8" style="font-size:0.85rem;"></div>
       </div>
 
       <!-- Danger zone -->
       <div class="card">
-        <div class="card-title" style="color:var(--red);">Xoa du lieu</div>
+        <div class="card-title" style="color:var(--red);">Xoá dữ liệu</div>
         <button class="btn btn-danger btn-outline btn-block btn-sm" id="clear-orders-btn" style="color:var(--red);border-color:var(--red);">
-          Xoa tat ca don hang
+          Xoá tất cả đơn hàng
         </button>
       </div>
     `;
@@ -93,7 +93,7 @@ const Sync = (() => {
       if (!file) return;
 
       try {
-        status.textContent = 'Dang doc file...';
+        status.textContent = 'Đang đọc file...';
         const text = await file.text();
         const data = JSON.parse(text);
 
@@ -119,14 +119,14 @@ const Sync = (() => {
         const cCount = data.customers ? data.customers.length : 0;
         const pCount = data.products ? data.products.length : 0;
 
-        status.innerHTML = `<span style="color:var(--green);">Thanh cong! Da nhap ${cCount} khach hang, ${pCount} san pham.</span>`;
-        UI.toast('Nhap du lieu thanh cong');
+        status.innerHTML = `<span style="color:var(--green);">Thành công! Đã nhập ${cCount} khách hàng, ${pCount} sản phẩm.</span>`;
+        UI.toast('Nhập dữ liệu thành công');
 
         // Update stat boxes
         setTimeout(() => Sync.render(document.getElementById('app-content')), 1500);
       } catch (err) {
-        status.innerHTML = `<span style="color:var(--red);">Loi: ${err.message}</span>`;
-        UI.toast('Loi khi nhap du lieu');
+        status.innerHTML = `<span style="color:var(--red);">Lỗi: ${err.message}</span>`;
+        UI.toast('Lỗi khi nhập dữ liệu');
       }
 
       // Reset file input
@@ -142,14 +142,14 @@ const Sync = (() => {
       const status = document.getElementById('export-status');
 
       if (!startDate || !endDate) {
-        UI.toast('Chon ngay truoc');
+        UI.toast('Chọn ngày trước');
         return;
       }
 
       const invoices = await DB.invoices.getByDateRange(startDate, endDate);
 
       if (invoices.length === 0) {
-        status.innerHTML = '<span style="color:var(--amber);">Khong co don hang nao trong khoang thoi gian nay.</span>';
+        status.innerHTML = '<span style="color:var(--amber);">Không có đơn hàng nào trong khoảng thời gian này.</span>';
         return;
       }
 
@@ -183,17 +183,17 @@ const Sync = (() => {
       a.click();
       URL.revokeObjectURL(url);
 
-      status.innerHTML = `<span style="color:var(--green);">Da xuat ${invoices.length} don hang.</span>`;
-      UI.toast('Xuat don hang thanh cong');
+      status.innerHTML = `<span style="color:var(--green);">Đã xuất ${invoices.length} đơn hàng.</span>`;
+      UI.toast('Xuất đơn hàng thành công');
     };
   }
 
   // === Clear orders ===
   function setupClear() {
     document.getElementById('clear-orders-btn').onclick = () => {
-      UI.confirm('Xoa tat ca don hang da ghi?', async () => {
+      UI.confirm('Xoá tất cả đơn hàng đã ghi?', async () => {
         await DB.invoices.clear();
-        UI.toast('Da xoa tat ca don hang');
+        UI.toast('Đã xoá tất cả đơn hàng');
         Sync.render(document.getElementById('app-content'));
       });
     };
@@ -208,12 +208,12 @@ const Sync = (() => {
     container.innerHTML = `
       <div class="card">
         <div class="flex-between mb-8">
-          <div class="card-title" style="margin-bottom:0;">Don hang hom nay</div>
-          <button class="btn btn-outline btn-xs" id="show-all-orders">Tat ca (${allInvoices.length})</button>
+          <div class="card-title" style="margin-bottom:0;">Đơn hàng hôm nay</div>
+          <button class="btn btn-outline btn-xs" id="show-all-orders">Tất cả (${allInvoices.length})</button>
         </div>
         <div id="orders-list">
           ${invoices.length === 0
-            ? '<div class="empty-state"><p>Chua co don hang nao hom nay</p></div>'
+            ? '<div class="empty-state"><p>Chưa có đơn hàng nào hôm nay</p></div>'
             : invoices.map((inv) => renderOrderCard(inv)).join('')
           }
         </div>
@@ -233,12 +233,12 @@ const Sync = (() => {
     container.innerHTML = `
       <div class="card">
         <div class="flex-between mb-8">
-          <div class="card-title" style="margin-bottom:0;">Tat ca don hang</div>
-          <button class="btn btn-outline btn-xs" id="show-today-orders">Hom nay</button>
+          <div class="card-title" style="margin-bottom:0;">Tất cả đơn hàng</div>
+          <button class="btn btn-outline btn-xs" id="show-today-orders">Hôm nay</button>
         </div>
         <div id="orders-list">
           ${invoices.length === 0
-            ? '<div class="empty-state"><p>Chua co don hang nao</p></div>'
+            ? '<div class="empty-state"><p>Chưa có đơn hàng nào</p></div>'
             : invoices.map((inv) => renderOrderCard(inv)).join('')
           }
         </div>
@@ -253,7 +253,7 @@ const Sync = (() => {
   }
 
   function renderOrderCard(inv) {
-    const name = inv.customer_name || inv.guest_name || 'Khach la';
+    const name = inv.customer_name || inv.guest_name || 'Khách lạ';
     const isG = !inv.customer_id;
     const itemCount = inv.details ? inv.details.length : 0;
 
@@ -262,11 +262,11 @@ const Sync = (() => {
         <div class="order-header">
           <div>
             <span class="order-customer">${name}</span>
-            ${isG ? ' <span class="guest-tag">Khach la</span>' : ''}
+            ${isG ? ' <span class="guest-tag">Khách lạ</span>' : ''}
           </div>
           <span class="order-total">${UI.formatCurrency(inv.total)}</span>
         </div>
-        <div class="order-meta">${itemCount} san pham &middot; ${UI.formatDate(inv.created_date)}</div>
+        <div class="order-meta">${itemCount} sản phẩm &middot; ${UI.formatDate(inv.created_date)}</div>
       </div>
     `;
   }
@@ -281,12 +281,12 @@ const Sync = (() => {
     const inv = await DB.invoices.get(tempId);
     if (!inv) return;
 
-    const name = inv.customer_name || inv.guest_name || 'Khach la';
+    const name = inv.customer_name || inv.guest_name || 'Khách lạ';
 
     const detailsHtml = (inv.details || []).map((d) => `
       <div class="item-row">
         <div class="item-info">
-          <div class="item-name">${d.product_name || 'San pham'}</div>
+          <div class="item-name">${d.product_name || 'Sản phẩm'}</div>
           <div class="item-detail">${d.quantity} x ${UI.formatCurrency(d.price)}</div>
         </div>
         <div class="item-subtotal">${UI.formatCurrency(d.subtotal)}</div>
@@ -296,15 +296,15 @@ const Sync = (() => {
     UI.showModal(`
       <div class="modal-title">${name}</div>
       <div class="text-secondary text-center mb-12" style="font-size:0.8rem;">${UI.formatDate(inv.created_date)}</div>
-      ${inv.note ? `<div class="mb-12" style="font-size:0.85rem;"><b>Ghi chu:</b> ${inv.note}</div>` : ''}
+      ${inv.note ? `<div class="mb-12" style="font-size:0.85rem;"><b>Ghi chú:</b> ${inv.note}</div>` : ''}
       ${detailsHtml}
       <div class="total-bar">
-        <span class="total-label">Tong cong</span>
+        <span class="total-label">Tổng cộng</span>
         <span class="total-amount">${UI.formatCurrency(inv.total)}</span>
       </div>
       <div class="action-row">
-        <button class="btn btn-outline" id="modal-edit-btn">Sua don</button>
-        <button class="btn btn-danger" id="modal-delete-btn">Xoa</button>
+        <button class="btn btn-outline" id="modal-edit-btn">Sửa đơn</button>
+        <button class="btn btn-danger" id="modal-delete-btn">Xoá</button>
       </div>
     `);
 
@@ -314,9 +314,9 @@ const Sync = (() => {
     };
 
     document.getElementById('modal-delete-btn').onclick = () => {
-      UI.confirm('Xoa don hang nay?', async () => {
+      UI.confirm('Xoá đơn hàng này?', async () => {
         await DB.invoices.delete(tempId);
-        UI.toast('Da xoa don hang');
+        UI.toast('Đã xoá đơn hàng');
         App.navigate('orders');
       });
     };

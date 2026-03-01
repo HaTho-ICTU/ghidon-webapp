@@ -5,9 +5,9 @@ const App = (() => {
   let currentPage = 'invoice';
 
   const PAGE_TITLES = {
-    invoice: 'Ghi don',
-    orders: 'Don hang',
-    sync: 'Dong bo'
+    invoice: 'Ghi đơn',
+    orders: 'Đơn hàng',
+    sync: 'Đồng bộ'
   };
 
   function navigate(page) {
