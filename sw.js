@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ghidon-v2';
+const CACHE_NAME = 'ghidon-v3';
 const ASSETS = [
   './',
   './index.html',

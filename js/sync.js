@@ -174,12 +174,31 @@ const Sync = (() => {
         }))
       };
 
-      // Download JSON
-      const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+      // Download JSON - dùng Web Share API trên iOS, fallback blob download
+      const jsonStr = JSON.stringify(exportData, null, 2);
+      const fileName = `orders_${startDate}_${endDate}.json`;
+
+      if (navigator.share && navigator.canShare) {
+        // iOS/mobile: dùng Share API để lưu vào Files hoặc gửi đi
+        const file = new File([jsonStr], fileName, { type: 'application/json' });
+        if (navigator.canShare({ files: [file] })) {
+          try {
+            await navigator.share({ files: [file], title: 'Xuất đơn hàng' });
+            status.innerHTML = `<span style="color:var(--green);">Đã xuất ${invoices.length} đơn hàng.</span>`;
+            UI.toast('Xuất đơn hàng thành công');
+            return;
+          } catch (e) {
+            if (e.name === 'AbortError') return; // user cancelled
+          }
+        }
+      }
+
+      // Fallback: blob download (Android/desktop)
+      const blob = new Blob([jsonStr], { type: 'application/json' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `orders_${startDate}_${endDate}.json`;
+      a.download = fileName;
       a.click();
       URL.revokeObjectURL(url);
 
