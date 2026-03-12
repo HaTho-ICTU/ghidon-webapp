@@ -1,10 +1,11 @@
-const CACHE_NAME = 'ghidon-v3';
+const CACHE_NAME = 'ghidon-v4';
 const ASSETS = [
   './',
   './index.html',
   './css/style.css',
   './js/app.js',
   './js/db.js',
+  './js/cloud.js',
   './js/invoice.js',
   './js/sync.js',
   './js/ui.js',
