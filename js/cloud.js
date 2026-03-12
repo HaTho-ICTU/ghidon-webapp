@@ -6,7 +6,7 @@ const Cloud = (() => {
   // === Config - thay doi sau khi tao project Supabase ===
   const CONFIG = {
     url: 'https://ovepotgheizgqkhfgbgz.supabase.co',
-    anonKey: 'sb_publishable_sZK8KVN5DpY2WflOOnswMw_oDrmhxgr',
+    anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im92ZXBvdGdoZWl6Z3FraGZnYmd6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMzMzA4OTcsImV4cCI6MjA4ODkwNjg5N30.js6498uHHl_cqbXo_cWfosCeOmhNf7Bn2H_QocWx0bE',
   };
 
   function isConfigured() {
