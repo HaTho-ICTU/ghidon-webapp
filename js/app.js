@@ -53,6 +53,18 @@ const App = (() => {
       navigator.serviceWorker.register('./sw.js').catch(() => {});
     }
 
+    // Start cloud auto-sync (retry pending orders when online)
+    Cloud.startAutoSync();
+
+    // Auto-sync pending orders on startup if online
+    if (navigator.onLine && Cloud.isConfigured()) {
+      Cloud.syncPendingOrders().then((result) => {
+        if (result.synced > 0) {
+          UI.toast(`Đã đồng bộ ${result.synced} đơn lên cloud`);
+        }
+      });
+    }
+
     // Start on invoice page
     navigate('invoice');
   }

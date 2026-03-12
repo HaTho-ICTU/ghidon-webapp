@@ -1,5 +1,5 @@
 /**
- * Sync module: import master data, export orders.
+ * Sync module: cloud sync, import master data, export orders.
  */
 const Sync = (() => {
 
@@ -8,6 +8,9 @@ const Sync = (() => {
     const customerCount = await DB.customers.count();
     const productCount = await DB.products.count();
     const orderCount = await DB.invoices.count();
+    const pendingCount = Cloud.isConfigured() ? await Cloud.getPendingCount() : 0;
+    const isOnline = navigator.onLine;
+    const cloudConfigured = Cloud.isConfigured();
 
     container.innerHTML = `
       <!-- Current data stats -->
@@ -29,14 +32,45 @@ const Sync = (() => {
         </div>
       </div>
 
-      <!-- Import section -->
+      <!-- Cloud status -->
       <div class="card">
-        <div class="card-title">Nhập dữ liệu từ máy tính</div>
+        <div class="card-title">Cloud Sync</div>
+        <div class="flex-between mb-8">
+          <span style="font-size:0.85rem;">Trạng thái:</span>
+          <span id="cloud-status" style="font-size:0.85rem;font-weight:600;color:${
+            !cloudConfigured ? 'var(--amber)' : isOnline ? 'var(--green)' : 'var(--red)'
+          }">
+            ${!cloudConfigured ? 'Chưa cấu hình' : isOnline ? 'Đã kết nối' : 'Mất kết nối'}
+          </span>
+        </div>
+        ${pendingCount > 0 ? `
+          <div class="flex-between mb-8">
+            <span style="font-size:0.85rem;color:var(--amber);">Đơn chờ đồng bộ: ${pendingCount}</span>
+            <button class="btn btn-outline btn-xs" id="sync-pending-btn" style="border-color:var(--amber);color:var(--amber);">Đồng bộ ngay</button>
+          </div>
+        ` : ''}
+
+        <!-- Cloud master data download -->
+        ${cloudConfigured ? `
+          <button class="btn btn-primary btn-block mb-8" id="cloud-download-btn">
+            Tải dữ liệu từ cloud
+          </button>
+          <div id="cloud-download-status" style="font-size:0.85rem;"></div>
+        ` : `
+          <p class="text-secondary" style="font-size:0.8rem;">
+            Cần cấu hình Supabase URL và Key trong file cloud.js để sử dụng cloud sync.
+          </p>
+        `}
+      </div>
+
+      <!-- File import section (backup) -->
+      <div class="card">
+        <div class="card-title">Nhập dữ liệu từ file</div>
         <p class="text-secondary mb-12" style="font-size:0.85rem;">
           Chọn file JSON đã xuất từ phần mềm desktop (khách hàng, sản phẩm, giá).
         </p>
         <input type="file" id="import-file" accept=".json" class="hidden">
-        <button class="btn btn-primary btn-block" id="import-btn">
+        <button class="btn btn-outline btn-block" id="import-btn">
           Chọn file để nhập
         </button>
         <div id="import-status" class="mt-8" style="font-size:0.85rem;"></div>
@@ -71,6 +105,7 @@ const Sync = (() => {
       </div>
     `;
 
+    setupCloudSync();
     setupImport();
     setupExport();
     setupClear();
@@ -80,7 +115,52 @@ const Sync = (() => {
     return new Date().toISOString().slice(0, 10);
   }
 
-  // === Import master data ===
+  // === Cloud sync handlers ===
+  function setupCloudSync() {
+    // Download master data from cloud
+    const downloadBtn = document.getElementById('cloud-download-btn');
+    if (downloadBtn) {
+      downloadBtn.onclick = async () => {
+        const status = document.getElementById('cloud-download-status');
+        downloadBtn.disabled = true;
+        downloadBtn.textContent = 'Đang tải...';
+        status.innerHTML = '';
+
+        const result = await Cloud.downloadMasterData();
+        if (result.ok) {
+          status.innerHTML = `<span style="color:var(--green);">Thành công! ${result.customers} khách hàng, ${result.products} sản phẩm.</span>`;
+          UI.toast('Đã tải dữ liệu từ cloud');
+          setTimeout(() => Sync.render(document.getElementById('app-content')), 1500);
+        } else {
+          status.innerHTML = `<span style="color:var(--red);">Lỗi: ${result.error}</span>`;
+          UI.toast('Lỗi tải dữ liệu');
+        }
+        downloadBtn.disabled = false;
+        downloadBtn.textContent = 'Tải dữ liệu từ cloud';
+      };
+    }
+
+    // Sync pending orders
+    const syncPendingBtn = document.getElementById('sync-pending-btn');
+    if (syncPendingBtn) {
+      syncPendingBtn.onclick = async () => {
+        syncPendingBtn.disabled = true;
+        syncPendingBtn.textContent = 'Đang đồng bộ...';
+
+        const result = await Cloud.syncPendingOrders();
+        if (result.synced > 0) {
+          UI.toast(`Đã đồng bộ ${result.synced} đơn lên cloud`);
+        }
+        if (result.failed > 0) {
+          UI.toast(`${result.failed} đơn chưa đồng bộ được`);
+        }
+
+        setTimeout(() => Sync.render(document.getElementById('app-content')), 500);
+      };
+    }
+  }
+
+  // === Import master data from file ===
   function setupImport() {
     const fileInput = document.getElementById('import-file');
     const btn = document.getElementById('import-btn');
@@ -275,6 +355,11 @@ const Sync = (() => {
     const name = inv.customer_name || inv.guest_name || 'Khách lạ';
     const isG = !inv.customer_id;
     const itemCount = inv.details ? inv.details.length : 0;
+    const cloudIcon = inv.cloud_status === 'synced'
+      ? '<span style="color:var(--green);font-size:0.7rem;" title="Đã đồng bộ cloud">&#9679;</span>'
+      : inv.cloud_status === 'pending'
+        ? '<span style="color:var(--amber);font-size:0.7rem;" title="Chờ đồng bộ">&#9679;</span>'
+        : '';
 
     return `
       <div class="order-card" data-id="${inv.temp_id}">
@@ -282,6 +367,7 @@ const Sync = (() => {
           <div>
             <span class="order-customer">${name}</span>
             ${isG ? ' <span class="guest-tag">Khách lạ</span>' : ''}
+            ${cloudIcon}
           </div>
           <span class="order-total">${UI.formatCurrency(inv.total)}</span>
         </div>
@@ -334,6 +420,7 @@ const Sync = (() => {
 
     document.getElementById('modal-delete-btn').onclick = () => {
       UI.confirm('Xoá đơn hàng này?', async () => {
+        await Cloud.deleteOrder(tempId);
         await DB.invoices.delete(tempId);
         UI.toast('Đã xoá đơn hàng');
         App.navigate('orders');

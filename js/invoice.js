@@ -477,7 +477,21 @@ const Invoice = (() => {
         }))
       };
 
+      // Lưu vào IndexedDB (offline)
       await DB.invoices.save(invoice);
+
+      // Upload lên cloud
+      if (Cloud.isConfigured()) {
+        const cloudResult = await Cloud.uploadOrder(invoice);
+        if (cloudResult.ok) {
+          invoice.cloud_status = 'synced';
+        } else {
+          invoice.cloud_status = 'pending';
+          console.warn('Cloud sync failed, will retry later:', cloudResult.error);
+        }
+        await DB.invoices.save(invoice);
+      }
+
       UI.toast(editingInvoice ? 'Đã cập nhật đơn' : 'Đã lưu đơn hàng');
       reset();
       // Navigate to orders page to see the saved invoice
