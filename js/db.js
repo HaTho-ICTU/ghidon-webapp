@@ -51,6 +51,10 @@ const DB = (() => {
           emp.createIndex('username', 'username', { unique: true });
         }
       };
+      req.onblocked = () => {
+        console.warn('DB: upgrade blocked - close other tabs');
+        reject(new Error('Database bị khoá. Vui lòng đóng các tab khác rồi thử lại.'));
+      };
       req.onsuccess = (e) => { db = e.target.result; resolve(db); };
       req.onerror = (e) => reject(e.target.error);
     });

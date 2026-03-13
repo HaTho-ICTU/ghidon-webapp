@@ -54,49 +54,70 @@ const App = (() => {
     window.scrollTo(0, 0);
 
     // Render page
-    switch (page) {
-      case 'invoice':
-        Invoice.render(content);
-        break;
-      case 'orders':
-        Sync.renderOrders(content);
-        break;
-      case 'sync':
-        Sync.render(content);
-        break;
+    try {
+      switch (page) {
+        case 'invoice':
+          Invoice.render(content);
+          break;
+        case 'orders':
+          Sync.renderOrders(content);
+          break;
+        case 'sync':
+          Sync.render(content);
+          break;
+      }
+    } catch (err) {
+      console.error('Navigate error:', err);
+      content.innerHTML = `<div class="card"><p style="color:var(--red);">Lỗi: ${err.message}</p></div>`;
     }
   }
 
   async function checkAuth() {
     const content = document.getElementById('app-content');
 
-    // Check if employees exist
-    const hasEmp = await Auth.hasEmployees();
-    if (!hasEmp) {
-      // No employees yet - show sync page to download data
+    try {
+      // Check if employees exist
+      const hasEmp = await Auth.hasEmployees();
+      if (!hasEmp) {
+        // No employees yet - show sync page to download data
+        hideApp();
+        // Show header and nav for sync access
+        document.getElementById('app-header').classList.remove('hidden');
+        document.getElementById('bottom-nav').classList.remove('hidden');
+        document.getElementById('app-content').classList.remove('no-auth');
+        Auth.renderNoEmployees(content);
+        return;
+      }
+
+      // Already logged in?
+      if (Auth.isLoggedIn()) {
+        showApp();
+        navigate('invoice');
+        return;
+      }
+
+      // Show login screen
       hideApp();
-      // Show header and nav for sync access
-      document.getElementById('app-header').classList.remove('hidden');
-      document.getElementById('bottom-nav').classList.remove('hidden');
-      document.getElementById('app-content').classList.remove('no-auth');
-      Auth.renderNoEmployees(content);
-      return;
-    }
-
-    // Already logged in?
-    if (Auth.isLoggedIn()) {
+      Auth.renderLogin(content, (emp) => {
+        showApp();
+        navigate('invoice');
+        UI.toast(`Xin chào ${emp.name}!`);
+      });
+    } catch (err) {
+      console.error('Auth check error:', err);
+      // Show error with option to go to sync
       showApp();
-      navigate('invoice');
-      return;
+      content.innerHTML = `
+        <div class="card">
+          <div class="card-title" style="color:var(--red);">Lỗi khởi động</div>
+          <p style="font-size:0.9rem;margin-bottom:12px;">${err.message}</p>
+          <p class="text-secondary" style="font-size:0.85rem;margin-bottom:16px;">
+            Thử đóng tất cả tab khác của ứng dụng rồi tải lại trang.
+          </p>
+          <button class="btn btn-primary btn-block" onclick="location.reload()">Tải lại trang</button>
+        </div>
+      `;
     }
-
-    // Show login screen
-    hideApp();
-    Auth.renderLogin(content, (emp) => {
-      showApp();
-      navigate('invoice');
-      UI.toast(`Xin chào ${emp.name}!`);
-    });
   }
 
   function doLogout() {
@@ -106,8 +127,26 @@ const App = (() => {
   }
 
   async function init() {
-    // Open database
-    await DB.open();
+    try {
+      // Open database
+      await DB.open();
+    } catch (err) {
+      console.error('DB open error:', err);
+      const content = document.getElementById('app-content');
+      content.innerHTML = `
+        <div style="padding:20px;">
+          <div class="card">
+            <div class="card-title" style="color:var(--red);">Lỗi mở database</div>
+            <p style="font-size:0.9rem;margin-bottom:12px;">${err.message}</p>
+            <p class="text-secondary" style="font-size:0.85rem;margin-bottom:16px;">
+              Hãy đóng tất cả các tab khác của ứng dụng rồi tải lại trang.
+            </p>
+            <button class="btn btn-primary btn-block" onclick="location.reload()">Tải lại trang</button>
+          </div>
+        </div>
+      `;
+      return;
+    }
 
     // Setup navigation
     document.querySelectorAll('.nav-btn').forEach((btn) => {
@@ -134,7 +173,7 @@ const App = (() => {
         if (result.synced > 0) {
           UI.toast(`Đã đồng bộ ${result.synced} đơn lên cloud`);
         }
-      });
+      }).catch((err) => console.warn('Auto-sync error:', err));
     }
 
     // Check auth before showing app
