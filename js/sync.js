@@ -128,7 +128,8 @@ const Sync = (() => {
 
         const result = await Cloud.downloadMasterData();
         if (result.ok) {
-          status.innerHTML = `<span style="color:var(--green);">Thành công! ${result.customers} khách hàng, ${result.products} sản phẩm.</span>`;
+          const empText = result.employees ? `, ${result.employees} nhân viên` : '';
+          status.innerHTML = `<span style="color:var(--green);">Thành công! ${result.customers} khách hàng, ${result.products} sản phẩm${empText}.</span>`;
           UI.toast('Đã tải dữ liệu từ cloud');
           setTimeout(() => Sync.render(document.getElementById('app-content')), 1500);
         } else {
@@ -196,10 +197,16 @@ const Sync = (() => {
           );
         }
 
+        // Import employees
+        if (data.employees && data.employees.length) {
+          await DB.employees.importAll(data.employees);
+        }
+
         const cCount = data.customers ? data.customers.length : 0;
         const pCount = data.products ? data.products.length : 0;
+        const eCount = data.employees ? data.employees.length : 0;
 
-        status.innerHTML = `<span style="color:var(--green);">Thành công! Đã nhập ${cCount} khách hàng, ${pCount} sản phẩm.</span>`;
+        status.innerHTML = `<span style="color:var(--green);">Thành công! Đã nhập ${cCount} khách hàng, ${pCount} sản phẩm${eCount ? ', ' + eCount + ' nhân viên' : ''}.</span>`;
         UI.toast('Nhập dữ liệu thành công');
 
         // Update stat boxes
@@ -371,7 +378,10 @@ const Sync = (() => {
           </div>
           <span class="order-total">${UI.formatCurrency(inv.total)}</span>
         </div>
-        <div class="order-meta">${itemCount} sản phẩm &middot; ${UI.formatDate(inv.created_date)}</div>
+        <div class="order-meta">
+          ${itemCount} sản phẩm &middot; ${UI.formatDate(inv.created_date)}
+          ${inv.employee_name ? ' &middot; <span class="order-employee">' + inv.employee_name + '</span>' : ''}
+        </div>
       </div>
     `;
   }
@@ -400,7 +410,10 @@ const Sync = (() => {
 
     UI.showModal(`
       <div class="modal-title">${name}</div>
-      <div class="text-secondary text-center mb-12" style="font-size:0.8rem;">${UI.formatDate(inv.created_date)}</div>
+      <div class="text-secondary text-center mb-12" style="font-size:0.8rem;">
+        ${UI.formatDate(inv.created_date)}
+        ${inv.employee_name ? ' &middot; NV: ' + inv.employee_name : ''}
+      </div>
       ${inv.note ? `<div class="mb-12" style="font-size:0.85rem;"><b>Ghi chú:</b> ${inv.note}</div>` : ''}
       ${detailsHtml}
       <div class="total-bar">

@@ -162,10 +162,16 @@ const Cloud = (() => {
         await DB.products.importAll(data.products || [], data.product_prices || []);
       }
 
+      // Import employees
+      if (data.employees && data.employees.length) {
+        await DB.employees.importAll(data.employees);
+      }
+
       return {
         ok: true,
         customers: data.customers ? data.customers.length : 0,
         products: data.products ? data.products.length : 0,
+        employees: data.employees ? data.employees.length : 0,
         updated_at: rows[0].updated_at,
       };
     } catch (err) {

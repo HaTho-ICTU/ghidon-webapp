@@ -4,7 +4,7 @@
  */
 const DB = (() => {
   const DB_NAME = 'ghidon_db';
-  const DB_VERSION = 1;
+  const DB_VERSION = 2;
   let db = null;
 
   function open() {
@@ -43,6 +43,12 @@ const DB = (() => {
           const inv = d.createObjectStore('invoices', { keyPath: 'temp_id' });
           inv.createIndex('created_date', 'created_date', { unique: false });
           inv.createIndex('customer_id', 'customer_id', { unique: false });
+        }
+
+        // Employees (v2)
+        if (!d.objectStoreNames.contains('employees')) {
+          const emp = d.createObjectStore('employees', { keyPath: 'id' });
+          emp.createIndex('username', 'username', { unique: true });
         }
       };
       req.onsuccess = (e) => { db = e.target.result; resolve(db); };
@@ -197,5 +203,21 @@ const DB = (() => {
     generateTempId: () => 'web_' + Date.now() + '_' + Math.random().toString(36).slice(2, 6),
   };
 
-  return { open, regions, customers, products, invoices };
+  // Employees
+  const employees = {
+    getAll: () => getAll('employees'),
+    get: (id) => get('employees', id),
+    getByUsername: async (username) => {
+      const all = await getAll('employees');
+      return all.find((e) => e.username === username) || null;
+    },
+    importAll: async (data) => {
+      await clear('employees');
+      if (data.length) await bulkPut('employees', data);
+    },
+    clear: () => clear('employees'),
+    count: async () => (await getAll('employees')).length,
+  };
+
+  return { open, regions, customers, products, invoices, employees };
 })();

@@ -16,6 +16,16 @@
   <!-- Header -->
   <header id="app-header">
     <h1 id="header-title">Ghi đơn</h1>
+    <div class="header-right">
+      <span id="header-employee" class="header-employee hidden"></span>
+      <button id="logout-btn" class="header-logout-btn" title="Đăng xuất">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+      </button>
+    </div>
   </header>
 
   <!-- Main content area -->
@@ -57,6 +67,7 @@
   <script src="./js/db.js"></script>
   <script src="./js/ui.js"></script>
   <script src="./js/cloud.js"></script>
+  <script src="./js/auth.js"></script>
   <script src="./js/invoice.js"></script>
   <script src="./js/sync.js"></script>
   <script src="./js/app.js"></script>

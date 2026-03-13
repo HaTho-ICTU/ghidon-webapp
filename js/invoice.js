@@ -454,6 +454,9 @@ const Invoice = (() => {
       const total = items.reduce((s, it) => s + it.subtotal, 0);
       const note = document.getElementById('invoice-note').value.trim();
 
+      // Attach logged-in employee info
+      const emp = Auth.getEmployee();
+
       const invoice = {
         temp_id: editingInvoice || DB.invoices.generateTempId(),
         customer_id: selectedCustomer ? selectedCustomer.id : null,
@@ -465,6 +468,9 @@ const Invoice = (() => {
           : UI.nowString(),
         total: total,
         note: note,
+        employee_id: emp ? emp.id : null,
+        employee_name: emp ? emp.name : null,
+        created_by: emp ? emp.name : '',
         details: items.map((it) => ({
           product_id: it.product_id,
           product_name: it.product_name,
